@@ -28,9 +28,11 @@ public class Match3Main extends Game {
         setScreen(screenMenu);
 	}
 
-	@Override
-	public void render () {
-	}
+    @Override
+    public void dispose() {
+        batch.dispose();
+        super.dispose();
+    }
 
     public void showMenu() {
         setScreen(screenMenu);
