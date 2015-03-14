@@ -15,8 +15,8 @@ public class GameField {
     private List<Sprite> spriteList;
     private Sprite activeBlockSprite;
 
-    private final int GAME_FIELD_WIDTH = 8;
-    private final int GAME_FIELD_HEIGHT = 8;
+    private final int GAME_FIELD_WIDTH = 6;
+    private final int GAME_FIELD_HEIGHT = 6;
     private Block gameField[][];
     private Block activeBlock;
 
@@ -28,7 +28,7 @@ public class GameField {
         spriteList.add(textureAtlas.createSprite("block_orange"));
         spriteList.add(textureAtlas.createSprite("block_green"));
         spriteList.add(textureAtlas.createSprite("block_teal"));
-        //spriteList.add(textureAtlas.createSprite("block_purple"));
+        spriteList.add(textureAtlas.createSprite("block_purple"));
 
         gameField = new Block [GAME_FIELD_WIDTH][GAME_FIELD_HEIGHT];
         int topLeftX = Gdx.graphics.getWidth() / 2 - (int)((GAME_FIELD_WIDTH / 2f) * spriteList.get(0).getWidth());
@@ -52,9 +52,15 @@ public class GameField {
     }
 
     public void shuffle() {
+        Sprite prevSprite = null;
         for (int i = 0; i < GAME_FIELD_HEIGHT; ++i) {
             for (int j = 0; j < GAME_FIELD_WIDTH; ++j) {
-                gameField[i][j].setSprite(getRandomSprite());
+                Sprite curSprite = getRandomSprite();
+                while (curSprite == prevSprite) {
+                    curSprite = getRandomSprite();
+                }
+                gameField[i][j].setSprite(curSprite);
+                prevSprite = curSprite;
             }
         }
     }
@@ -131,13 +137,16 @@ public class GameField {
 
     private List<Block> findChain() {
         List<Block> currentChain = new ArrayList<Block>();
+        List<Block> usedBlocks = new ArrayList<Block>();
         for (int i = 0; i < GAME_FIELD_HEIGHT; ++i) {
             for (int j = 0; j < GAME_FIELD_WIDTH; ++j) {
-                currentChain.clear();
-                buildChain(currentChain, gameField[i][j]);
-                currentChain = checkChain(currentChain);
-                if (currentChain.size() >= 3) {
-                    return currentChain;
+                if (!usedBlocks.contains(gameField[i][j])) {
+                    currentChain.clear();
+                    buildChain(usedBlocks, currentChain, gameField[i][j]);
+                    currentChain = checkChain(currentChain);
+                    if (currentChain.size() >= 3) {
+                        return currentChain;
+                    }
                 }
             }
         }
@@ -184,23 +193,24 @@ public class GameField {
         return checkedBlockList;
     }
 
-    private void buildChain(List<Block> currentChain, Block block) {
+    private void buildChain(List<Block> usedBlocks, List<Block> currentChain, Block block) {
+        usedBlocks.add(block);
         Block nextBlock;
         nextBlock = stepRight(currentChain, block);
         if (nextBlock != null) {
-            buildChain(currentChain, nextBlock);
+            buildChain(usedBlocks, currentChain, nextBlock);
         }
         nextBlock = stepLeft(currentChain, block);
         if (nextBlock != null) {
-            buildChain(currentChain, nextBlock);
+            buildChain(usedBlocks, currentChain, nextBlock);
         }
         nextBlock = stepUp(currentChain, block);
         if (nextBlock != null) {
-            buildChain(currentChain, nextBlock);
+            buildChain(usedBlocks, currentChain, nextBlock);
         }
         nextBlock = stepDown(currentChain, block);
         if (nextBlock != null) {
-            buildChain(currentChain, nextBlock);
+            buildChain(usedBlocks, currentChain, nextBlock);
         }
     }
 
