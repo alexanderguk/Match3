@@ -24,16 +24,23 @@ block_orange
   orig: 64, 64
   offset: 0, 0
   index: -1
-block_red
+block_purple
   rotate: false
   xy: 199, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
-block_teal
+block_red
   rotate: false
   xy: 265, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+block_teal
+  rotate: false
+  xy: 331, 1
   size: 64, 64
   orig: 64, 64
   offset: 0, 0
