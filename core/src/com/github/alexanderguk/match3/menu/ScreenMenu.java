@@ -13,9 +13,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.alexanderguk.match3.Match3Main;
 
 public class ScreenMenu implements Screen {
+    private Viewport viewport;
     private Stage stage;
     private Skin skin;
     private Table table;
@@ -24,7 +27,8 @@ public class ScreenMenu implements Screen {
     private Label title;
 
     public ScreenMenu(SpriteBatch batch) {
-        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage = new Stage(viewport, batch);
         skin = new Skin(Gdx.files.internal("skins/menuSkin.json"),
                 new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack")));
 
@@ -70,7 +74,7 @@ public class ScreenMenu implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
     }
 
     @Override

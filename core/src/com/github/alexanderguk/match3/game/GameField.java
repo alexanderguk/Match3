@@ -103,14 +103,14 @@ public class GameField {
     }
 
     public boolean update() {
+        boolean isUpdated = false;
         List<Block> chain = findChain();
-        if (chain != null) {
+        while (chain != null) {
+            isUpdated = true;
             deleteChain(chain);
-            update();
-            return true;
-        } else {
-            return false;
+            chain = findChain();
         }
+        return isUpdated;
     }
 
     private void deleteChain(List<Block> chain) {

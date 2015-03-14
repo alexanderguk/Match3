@@ -6,13 +6,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class ScreenGame implements Screen {
+    private Viewport viewport;
     private Stage stage;
     private GameField gameField;
 
     public ScreenGame(SpriteBatch batch) {
-        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()), batch);
+        viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage = new Stage(viewport, batch);
         gameField = new GameField();
         for (Block block : gameField.getBlockList()) {
             stage.addActor(block);
@@ -37,7 +41,7 @@ public class ScreenGame implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
+        viewport.update(width, height);
     }
 
     @Override
