@@ -2,8 +2,8 @@ package com.github.alexanderguk.match3;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.github.alexanderguk.match3.screen.ScreenGame;
-import com.github.alexanderguk.match3.screen.ScreenMenu;
+import com.github.alexanderguk.match3.game.ScreenGame;
+import com.github.alexanderguk.match3.menu.ScreenMenu;
 
 public class Match3Main extends Game {
     private ScreenMenu screenMenu;
