@@ -55,18 +55,18 @@ public class GameField {
 
         timer = new Timer();
         timer.scheduleTask(new Timer.Task() {
-                @Override
-                public void run() {
-                    isLocked = false;
-                    if (update()) {
-                        if (isChainExist()) {
-                            isLocked = true;
-                        }
-                    }
-                }
-            }
-            , 0
-            , TIMER_INTERVAL
+                               @Override
+                               public void run() {
+                                   isLocked = false;
+                                   if (update()) {
+                                       if (isChainExist()) {
+                                           isLocked = true;
+                                       }
+                                   }
+                               }
+                           }
+                , 0
+                , TIMER_INTERVAL
         );
 
         shuffle();
@@ -120,17 +120,15 @@ public class GameField {
                 Sprite tempSprite = block.getSprite();
                 block.setSprite(activeBlock.getSprite());
                 activeBlock.setSprite(tempSprite);
-                if (!update()) {
+                if (!isChainExist()) {
                     tempSprite = block.getSprite();
                     block.setSprite(activeBlock.getSprite());
                     activeBlock.setSprite(tempSprite);
                 } else {
                     isLocked = true;
-                    if (isChainExist()) {
-                        timer.stop();
-                        timer.delay((long)(TIMER_INTERVAL * 1000));
-                        timer.start();
-                    }
+                    timer.stop();
+                    timer.delay((long)(TIMER_INTERVAL * 1000));
+                    timer.start();
                     activeBlock.setActive(false);
                     activeBlock = null;
                 }
