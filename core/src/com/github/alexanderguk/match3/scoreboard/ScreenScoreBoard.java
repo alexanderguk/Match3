@@ -37,7 +37,7 @@ public class ScreenScoreBoard implements Screen {
 
         buttonMenu = new TextButton("Menu", skin);
         title = new Label("Score Board", skin);
-        System.out.println("ScreenScoreBoard.show()");
+        
         buttonMenu.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
