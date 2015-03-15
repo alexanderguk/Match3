@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.alexanderguk.match3.Match3Main;
 
@@ -32,7 +31,6 @@ public class ScreenMenu implements Screen {
         skin = new Skin(Gdx.files.internal("skins/menuSkin.json"),
                 new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack")));
 
-        table = new Table();
         buttonPlay = new TextButton("Play", skin);
         buttonExit = new TextButton("Exit", skin);
         title = new Label("Match 3",skin);
@@ -54,9 +52,11 @@ public class ScreenMenu implements Screen {
             }
         });
 
-        table.add(title).padBottom(40).row();
-        table.add(buttonPlay).row();
-        table.add(buttonExit).row();
+        table = new Table();
+
+        table.add(title).padBottom(20).row();
+        table.add(buttonPlay).padBottom(20).row();
+        table.add(buttonExit).padBottom(50).row();
 
         table.setFillParent(true);
         stage.addActor(table);

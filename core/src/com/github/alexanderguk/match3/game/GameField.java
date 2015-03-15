@@ -22,8 +22,14 @@ public class GameField {
     private Block activeBlock;
 
     private boolean isLocked;
-    private Timer timer;
-    private final float TIMER_INTERVAL = 0.7f;
+    private Timer delayTimer;
+    private final float DELAY_TIMER_INTERVAL = 0.7f;
+
+    private int score;
+    private float gameTimer;
+    private final float ROUND_TIME_INTERVAL = 5f;
+
+    private boolean isGameOver;
 
     public GameField() {
         textureAtlas = new TextureAtlas(Gdx.files.internal("atlases/gamePack.pack"));
@@ -53,23 +59,34 @@ public class GameField {
             }
         }
 
-        timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
-                               @Override
-                               public void run() {
-                                   isLocked = false;
-                                   if (update()) {
-                                       if (isChainExist()) {
-                                           isLocked = true;
-                                       }
-                                   }
-                               }
+        delayTimer = new Timer();
+        delayTimer.scheduleTask(new Timer.Task() {
+                   @Override
+                   public void run() {
+                       isLocked = false;
+                       if (update()) {
+                           if (isChainExist()) {
+                               isLocked = true;
                            }
+                       }
+                   }
+               }
                 , 0
-                , TIMER_INTERVAL
+                , DELAY_TIMER_INTERVAL
         );
 
+        gameTimer = ROUND_TIME_INTERVAL;
+
         shuffle();
+    }
+
+    public void act(float delta) {
+        if (gameTimer <= 0) {
+            isGameOver = true;
+            isLocked = true;
+        } else {
+            gameTimer -= delta;
+        }
     }
 
     public void shuffle() {
@@ -126,9 +143,8 @@ public class GameField {
                     activeBlock.setSprite(tempSprite);
                 } else {
                     isLocked = true;
-                    timer.stop();
-                    timer.delay((long)(TIMER_INTERVAL * 1000));
-                    timer.start();
+                    delayTimer.stop();
+                    delayTimer.start();
                     activeBlock.setActive(false);
                     activeBlock = null;
                 }
@@ -146,10 +162,13 @@ public class GameField {
 
     public boolean update() {
         boolean isUpdated = false;
-        List<Block> chain = findChain();
-        if (chain != null) {
-            isUpdated = true;
-            deleteChain(chain);
+        if (!isGameOver) {
+            List<Block> chain = findChain();
+            if (chain != null) {
+                isUpdated = true;
+                deleteChain(chain);
+                score += 100 * chain.size();
+            }
         }
         return isUpdated;
     }
@@ -287,5 +306,24 @@ public class GameField {
             return gameField[block.getGameFieldY() + 1][block.getGameFieldX()];
         }
         return null;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void reset() {
+        score = 0;
+        gameTimer = ROUND_TIME_INTERVAL;
+        isLocked = false;
+        isGameOver = false;
+    }
+
+    public float getRoundTime() {
+        return gameTimer;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
     }
 }
