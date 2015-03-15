@@ -7,7 +7,7 @@ import com.github.alexanderguk.match3.Match3Main;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.height = 800;
+        config.height = 600;
         config.width = 600;
 		new LwjglApplication(Match3Main.getInstance(), config);
 	}

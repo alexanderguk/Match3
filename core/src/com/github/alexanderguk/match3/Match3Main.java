@@ -22,6 +22,7 @@ public class Match3Main extends Game {
 	@Override
 	public void create () {
         batch = new SpriteBatch();
+
         screenMenu = new ScreenMenu(batch);
         screenGame = new ScreenGame(batch);
 
