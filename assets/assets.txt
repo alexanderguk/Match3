@@ -9,12 +9,15 @@ i:fonts/texgyreheros.png:14098:image/png
 t:fonts/texgyreheros18.fnt:11566:application/unknown
 i:fonts/texgyreheros18.png:7892:image/png
 d:skins:0:application/unknown
-t:skins/gameSkin.json:1010:application/unknown
+t:skins/gameSkin.json:1245:application/unknown
 t:skins/gameSkin.pack:316:application/unknown
 i:skins/gameSkin.png:1284:image/png
-t:skins/menuSkin.json:729:application/unknown
+t:skins/menuSkin.json:1060:application/unknown
 t:skins/menuSkin.pack:316:application/unknown
 i:skins/menuSkin.png:1284:image/png
+t:skins/scoreBoardSkin.json:877:application/unknown
+t:skins/scoreBoardSkin.pack:414:application/unknown
+i:skins/scoreBoardSkin.png:1315:image/png
 t:com/badlogic/gdx/graphics/g3d/particles/particles.fragment.glsl:770:application/unknown
 t:com/badlogic/gdx/graphics/g3d/particles/particles.vertex.glsl:2730:application/unknown
 t:com/badlogic/gdx/graphics/g3d/shaders/default.fragment.glsl:5163:application/unknown

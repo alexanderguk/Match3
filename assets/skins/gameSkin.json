@@ -43,5 +43,16 @@
     font: texgyreheros18,
     fontColor: orange
   }
+  scoreSend: {
+    font: texgyreheros18,
+    fontColor: black
+  }
+},
+  com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+  default: {
+    background: button01,
+    font: texgyreheros18,
+    fontColor: black
+  }
 }
 }
