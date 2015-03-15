@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,10 @@ public class GameField {
     private final int GAME_FIELD_HEIGHT = 6;
     private Block gameField[][];
     private Block activeBlock;
+
+    private boolean isLocked;
+    private Timer timer;
+    private final float TIMER_INTERVAL = 0.7f;
 
     public GameField() {
         textureAtlas = new TextureAtlas(Gdx.files.internal("atlases/gamePack.pack"));
@@ -48,6 +53,22 @@ public class GameField {
             }
         }
 
+        timer = new Timer();
+        timer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    isLocked = false;
+                    if (update()) {
+                        if (isChainExist()) {
+                            isLocked = true;
+                        }
+                    }
+                }
+            }
+            , 0
+            , TIMER_INTERVAL
+        );
+
         shuffle();
     }
 
@@ -63,6 +84,11 @@ public class GameField {
                 prevSprite = curSprite;
             }
         }
+        List<Block> chain = findChain();
+        while (chain != null) {
+            deleteChain(chain);
+            chain = findChain();
+        }
     }
 
     public List<Block> getBlockList() {
@@ -76,45 +102,56 @@ public class GameField {
     }
 
     private void clickOn(Block block) {
-        if (activeBlock == null) {
-            activeBlock = block;
-            block.setActive(true);
-        } else if (activeBlock == block) {
-            activeBlock = null;
-            block.setActive(false);
-        } else if ((block.getGameFieldX() == activeBlock.getGameFieldX() - 1 &&
-                block.getGameFieldY() == activeBlock.getGameFieldY()) ||
-                (block.getGameFieldX() == activeBlock.getGameFieldX() + 1 &&
-                block.getGameFieldY() == activeBlock.getGameFieldY()) ||
-                (block.getGameFieldX() == activeBlock.getGameFieldX() &&
-                block.getGameFieldY() == activeBlock.getGameFieldY() - 1) ||
-                (block.getGameFieldX() == activeBlock.getGameFieldX() &&
-                block.getGameFieldY() == activeBlock.getGameFieldY() + 1)) {
-            Sprite tempSprite = block.getSprite();
-            block.setSprite(activeBlock.getSprite());
-            activeBlock.setSprite(tempSprite);
-            if (!update()) {
-                tempSprite = block.getSprite();
+        if (!isLocked) {
+            if (activeBlock == null) {
+                activeBlock = block;
+                block.setActive(true);
+            } else if (activeBlock == block) {
+                activeBlock = null;
+                block.setActive(false);
+            } else if ((block.getGameFieldX() == activeBlock.getGameFieldX() - 1 &&
+                    block.getGameFieldY() == activeBlock.getGameFieldY()) ||
+                    (block.getGameFieldX() == activeBlock.getGameFieldX() + 1 &&
+                            block.getGameFieldY() == activeBlock.getGameFieldY()) ||
+                    (block.getGameFieldX() == activeBlock.getGameFieldX() &&
+                            block.getGameFieldY() == activeBlock.getGameFieldY() - 1) ||
+                    (block.getGameFieldX() == activeBlock.getGameFieldX() &&
+                            block.getGameFieldY() == activeBlock.getGameFieldY() + 1)) {
+                Sprite tempSprite = block.getSprite();
                 block.setSprite(activeBlock.getSprite());
                 activeBlock.setSprite(tempSprite);
+                if (!update()) {
+                    tempSprite = block.getSprite();
+                    block.setSprite(activeBlock.getSprite());
+                    activeBlock.setSprite(tempSprite);
+                } else {
+                    isLocked = true;
+                    if (isChainExist()) {
+                        timer.stop();
+                        timer.delay((long)(TIMER_INTERVAL * 1000));
+                        timer.start();
+                    }
+                    activeBlock.setActive(false);
+                    activeBlock = null;
+                }
             } else {
                 activeBlock.setActive(false);
-                activeBlock = null;
+                activeBlock = block;
+                block.setActive(true);
             }
-        } else {
-            activeBlock.setActive(false);
-            activeBlock = block;
-            block.setActive(true);
         }
+    }
+
+    private boolean isChainExist() {
+        return findChain() != null;
     }
 
     public boolean update() {
         boolean isUpdated = false;
         List<Block> chain = findChain();
-        while (chain != null) {
+        if (chain != null) {
             isUpdated = true;
             deleteChain(chain);
-            chain = findChain();
         }
         return isUpdated;
     }
