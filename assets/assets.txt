@@ -6,7 +6,12 @@ i:atlases/gamePack.png:1035:image/png
 d:fonts:0:application/unknown
 t:fonts/texgyreheros.fnt:11634:application/unknown
 i:fonts/texgyreheros.png:14098:image/png
+t:fonts/texgyreheros18.fnt:11566:application/unknown
+i:fonts/texgyreheros18.png:7892:image/png
 d:skins:0:application/unknown
+t:skins/gameSkin.json:1010:application/unknown
+t:skins/gameSkin.pack:316:application/unknown
+i:skins/gameSkin.png:1284:image/png
 t:skins/menuSkin.json:729:application/unknown
 t:skins/menuSkin.pack:316:application/unknown
 i:skins/menuSkin.png:1284:image/png
