@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -22,8 +19,11 @@ public class ScreenMenu implements Screen {
     private Skin skin;
     private Table table;
     private TextButton buttonPlay;
+    private TextButton buttonScoreBoard;
     private TextButton buttonExit;
     private Label title;
+    private Label authorLabel;
+    private Label authorLinkLabel;
 
     public ScreenMenu(SpriteBatch batch) {
         viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -32,35 +32,59 @@ public class ScreenMenu implements Screen {
                 new TextureAtlas(Gdx.files.internal("skins/menuSkin.pack")));
 
         buttonPlay = new TextButton("Play", skin);
+        buttonScoreBoard = new TextButton("Score Board", skin);
         buttonExit = new TextButton("Exit", skin);
         title = new Label("Match 3",skin);
-    }
 
-    @Override
-    public void show() {
+        table = new Table();
+
+        table.add(title).padBottom(20).row();
+        table.add(buttonPlay).padBottom(20).row();
+        table.add(buttonScoreBoard).padBottom(20).row();
+        table.add(buttonExit).padBottom(50).row();
+        table.setFillParent(true);
+
+        authorLabel = new Label("Created by ", skin, "author");
+        authorLinkLabel = new Label("Alexander Guk", skin, "authorLink");
+
+        authorLinkLabel.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.net.openURI("https://github.com/alexanderguk");
+            }
+        });
+
+        Table repoLink = new Table();
+        repoLink.add(authorLabel);
+        repoLink.add(authorLinkLabel);
+        repoLink.setFillParent(true);
+        repoLink.center().bottom();
+
+        stage.addActor(table);
+        stage.addActor(repoLink);
+
         buttonPlay.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 Match3Main.getInstance().showGame();
             }
         });
-        buttonExit.addListener(new ClickListener(){
+        buttonScoreBoard.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Exit");
+                Match3Main.getInstance().showScoreBoard();
+            }
+        });
+        buttonExit.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
                 Gdx.app.exit();
             }
         });
+    }
 
-        table = new Table();
-
-        table.add(title).padBottom(20).row();
-        table.add(buttonPlay).padBottom(20).row();
-        table.add(buttonExit).padBottom(50).row();
-
-        table.setFillParent(true);
-        stage.addActor(table);
-
+    @Override
+    public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 

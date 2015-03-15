@@ -27,7 +27,7 @@ public class GameField {
 
     private int score;
     private float gameTimer;
-    private final float ROUND_TIME_INTERVAL = 5f;
+    private final float ROUND_TIME_INTERVAL = 2f;
 
     private boolean isGameOver;
 
